@@ -1,5 +1,6 @@
 package com.denizenscript.depenizen.bukkit.properties.worldguard;
 
+import com.denizenscript.denizen.tags.core.ServerTagBase;
 import com.denizenscript.denizencore.objects.core.ElementTag;
 import com.denizenscript.denizencore.objects.properties.Property;
 import com.denizenscript.denizencore.objects.Mechanism;
@@ -58,13 +59,14 @@ public class WorldGuardWorldProperties implements Property {
     public String getAttribute(Attribute attribute) {
 
         // <--[tag]
-        // @attribute <WorldTag.list_regions>
+        // @attribute <WorldTag.regions>
         // @returns ListTag(WorldGuardRegionTag)
         // @plugin Depenizen, WorldGuard
         // @description
         // Returns a list of WorldGuard regions in this world.
         // -->
-        if (attribute.startsWith("list_regions")) {
+        if (attribute.startsWith("regions") || attribute.startsWith("list_regions")) {
+            ServerTagBase.listDeprecateWarn(attribute);
             ListTag regions = new ListTag();
             for (ProtectedRegion r : manager.getRegions().values()) {
                 regions.addObject(new WorldGuardRegionTag(r, world));

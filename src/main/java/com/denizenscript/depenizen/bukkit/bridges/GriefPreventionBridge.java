@@ -1,5 +1,6 @@
 package com.denizenscript.depenizen.bukkit.bridges;
 
+import com.denizenscript.denizen.tags.core.ServerTagBase;
 import com.denizenscript.denizencore.objects.core.ListTag;
 import com.denizenscript.denizencore.tags.Attribute;
 import com.denizenscript.denizencore.tags.ReplaceableTagEvent;
@@ -38,13 +39,14 @@ public class GriefPreventionBridge extends Bridge {
         Attribute attribute = event.getAttributes().fulfill(1);
 
         // <--[tag]
-        // @attribute <griefprevention.list_claims>
+        // @attribute <griefprevention.claims>
         // @returns ListTag(GriefPreventionClaimTag)
         // @plugin Depenizen, GriefPrevention
         // @description
         // Returns a list of all GriefPrevention claims.
         // -->
-        if (attribute.startsWith("list_claims")) {
+        if (attribute.startsWith("claims") || attribute.startsWith("list_claims")) {
+            ServerTagBase.listDeprecateWarn(attribute);
             ListTag result = new ListTag();
             for (Claim claim : GriefPrevention.instance.dataStore.getClaims()) {
                 result.addObject(new GriefPreventionClaimTag(claim));

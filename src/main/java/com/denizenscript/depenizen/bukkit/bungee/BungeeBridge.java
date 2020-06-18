@@ -1,5 +1,6 @@
 package com.denizenscript.depenizen.bukkit.bungee;
 
+import com.denizenscript.denizen.tags.core.ServerTagBase;
 import com.denizenscript.depenizen.bukkit.Depenizen;
 import com.denizenscript.depenizen.bukkit.bungee.packets.in.*;
 import com.denizenscript.depenizen.bukkit.bungee.packets.out.ControlsProxyCommandPacketOut;
@@ -240,6 +241,20 @@ public class BungeeBridge {
         Attribute attribute = event.getAttributes().fulfill(1);
 
         // <--[tag]
+        // @attribute <bungee.servers>
+        // @returns ListTag
+        // @plugin Depenizen, BungeeCord
+        // @description
+        // Returns a list of known bungee server names.
+        // -->
+        if (attribute.startsWith("servers") || attribute.startsWith("list_servers")) {
+            ServerTagBase.listDeprecateWarn(attribute);
+            event.setReplacedObject(new ListTag(knownServers)
+                    .getObjectAttribute(attribute.fulfill(1)));
+            return;
+        }
+
+        // <--[tag]
         // @attribute <bungee.server>
         // @returns ElementTag
         // @plugin Depenizen, BungeeCord
@@ -248,18 +263,6 @@ public class BungeeBridge {
         // -->
         if (attribute.startsWith("server")) {
             event.setReplacedObject(new ElementTag(serverName)
-                    .getObjectAttribute(attribute.fulfill(1)));
-        }
-
-        // <--[tag]
-        // @attribute <bungee.list_servers>
-        // @returns ListTag
-        // @plugin Depenizen, BungeeCord
-        // @description
-        // Returns a list of known bungee server names.
-        // -->
-        if (attribute.startsWith("list_servers")) {
-            event.setReplacedObject(new ListTag(knownServers)
                     .getObjectAttribute(attribute.fulfill(1)));
         }
 

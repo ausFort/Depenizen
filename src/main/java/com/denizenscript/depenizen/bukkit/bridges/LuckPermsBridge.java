@@ -1,5 +1,6 @@
 package com.denizenscript.depenizen.bukkit.bridges;
 
+import com.denizenscript.denizen.tags.core.ServerTagBase;
 import com.denizenscript.depenizen.bukkit.properties.luckperms.LuckPermsPlayerProperties;
 import com.denizenscript.depenizen.bukkit.objects.luckperms.LuckPermsTrackTag;
 import com.denizenscript.depenizen.bukkit.Bridge;
@@ -36,13 +37,14 @@ public class LuckPermsBridge extends Bridge {
         Attribute attribute = event.getAttributes().fulfill(1);
 
         // <--[tag]
-        // @attribute <luckperms.list_tracks>
-        // @returns ListTag(luckpermstrack)
+        // @attribute <luckperms.tracks>
+        // @returns ListTag(LuckPermsTrackTag)
         // @plugin Depenizen, LuckPerms
         // @description
         // Returns a list of all tracks.
         // -->
-        if (attribute.startsWith("list_tracks")) {
+        if (attribute.startsWith("tracks") || attribute.startsWith("list_tracks")) {
+            ServerTagBase.listDeprecateWarn(attribute);
             ListTag tracks = new ListTag();
             for (Track track : luckPermsInstance.getTrackManager().getLoadedTracks()) {
                 tracks.addObject(new LuckPermsTrackTag(track));

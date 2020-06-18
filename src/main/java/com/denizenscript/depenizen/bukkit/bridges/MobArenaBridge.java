@@ -1,5 +1,6 @@
 package com.denizenscript.depenizen.bukkit.bridges;
 
+import com.denizenscript.denizen.tags.core.ServerTagBase;
 import com.denizenscript.depenizen.bukkit.events.mobarena.MobArenaStartsScriptEvent;
 import com.denizenscript.depenizen.bukkit.Bridge;
 import com.garbagemule.MobArena.MobArena;
@@ -66,13 +67,14 @@ public class MobArenaBridge extends Bridge {
         attribute = attribute.fulfill(1);
 
         // <--[tag]
-        // @attribute <mobarena.list_arenas>
+        // @attribute <mobarena.arenas>
         // @returns ListTag(MobArena)
         // @plugin Depenizen, MobArena
         // @description
         // Returns a list of all MobArenas.
         // -->
-        if (attribute.startsWith("list_arenas")) {
+        if (attribute.startsWith("arenas") || attribute.startsWith("list_arenas")) {
+            ServerTagBase.listDeprecateWarn(attribute);
             ListTag arenas = new ListTag();
             for (Arena a : ((MobArena) plugin).getArenaMaster().getArenas()) {
                 if (((MobArena) plugin).getArenaMaster().getArenaWithName(a.configName()) == null) {

@@ -1,5 +1,6 @@
 package com.denizenscript.depenizen.bukkit.bridges;
 
+import com.denizenscript.denizen.tags.core.ServerTagBase;
 import com.denizenscript.depenizen.bukkit.events.pvparena.PlayerExitsPVPArenaScriptEvent;
 import com.denizenscript.depenizen.bukkit.events.pvparena.PlayerJoinsPVPArenaScriptEvent;
 import com.denizenscript.depenizen.bukkit.events.pvparena.PlayerLeavesPVPArenaScriptEvent;
@@ -58,19 +59,20 @@ public class PVPArenaBridge extends Bridge {
             }
             return;
         }
+        attribute = attribute.fulfill(1);
 
         // <--[tag]
-        // @attribute <pvparena.list_arenas>
+        // @attribute <pvparena.arenas>
         // @returns ListTag(PVPArena)
         // @plugin Depenizen, PVPArena
         // @description
         // Returns a list of all PVPArenas.
         // -->
-        attribute = attribute.fulfill(1);
-        if (attribute.startsWith("list_arenas")) {
+        if (attribute.startsWith("arenas") || attribute.startsWith("list_arenas")) {
+            ServerTagBase.listDeprecateWarn(attribute);
             ListTag arenas = new ListTag();
-            for (Arena a : ArenaManager.getArenas()) {
-                arenas.addObject(new PVPArenaArenaTag(a));
+            for (Arena arena : ArenaManager.getArenas()) {
+                arenas.addObject(new PVPArenaArenaTag(arena));
             }
             event.setReplacedObject(arenas.getObjectAttribute(attribute.fulfill(1)));
         }

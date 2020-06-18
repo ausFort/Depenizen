@@ -1,5 +1,6 @@
 package com.denizenscript.depenizen.bukkit.properties.towny;
 
+import com.denizenscript.denizen.tags.core.ServerTagBase;
 import com.denizenscript.denizencore.objects.properties.Property;
 import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.depenizen.bukkit.objects.towny.TownTag;
@@ -78,13 +79,14 @@ public class TownyCuboidProperties implements Property {
         }
 
         // <--[tag]
-        // @attribute <CuboidTag.list_towns>
+        // @attribute <CuboidTag.towns>
         // @returns ListTag(TownTag)
         // @plugin Depenizen, Towny
         // @description
         // Returns all the towns within the cuboid.
         // -->
-        if (attribute.startsWith("list_towns")) {
+        if (attribute.startsWith("towns") || attribute.startsWith("list_towns")) {
+            ServerTagBase.listDeprecateWarn(attribute);
             ListTag list = new ListTag();
             List<String> towns = new ArrayList<>();
             try {

@@ -1,5 +1,6 @@
 package com.denizenscript.depenizen.bukkit.bridges;
 
+import com.denizenscript.denizen.tags.core.ServerTagBase;
 import com.denizenscript.denizencore.events.ScriptEvent;
 import com.denizenscript.denizencore.objects.core.ListTag;
 import com.denizenscript.denizencore.tags.Attribute;
@@ -42,13 +43,14 @@ public class QuestsBridge extends Bridge {
         Attribute attribute = event.getAttributes().fulfill(1);
 
         // <--[tag]
-        // @attribute <quests.list_quests>
+        // @attribute <quests.list>
         // @returns ListTag
         // @plugin Depenizen, Quests
         // @description
         // Returns a list of all quest IDs from the Quests plugin.
         // -->
-        if (attribute.startsWith("list_quests")) {
+        if (attribute.startsWith("list")) {
+            ServerTagBase.listDeprecateWarn(attribute);
             ListTag list = new ListTag();
             for (Quest quest : ((Quests) plugin).getQuests()) {
                 list.add(quest.getId());

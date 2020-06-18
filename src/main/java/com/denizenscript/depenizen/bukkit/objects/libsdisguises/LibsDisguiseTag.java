@@ -55,7 +55,7 @@ public class LibsDisguiseTag implements ObjectTag {
     }
 
     public static boolean matches(String arg) {
-        return arg.startsWith("disguise@");
+        return arg.startsWith("libsdisguise@");
     }
 
     /////////////////////
@@ -64,8 +64,8 @@ public class LibsDisguiseTag implements ObjectTag {
 
     Disguise disguise;
 
-    public LibsDisguiseTag(Disguise pl) {
-        disguise = pl;
+    public LibsDisguiseTag(Disguise disguise) {
+        this.disguise = disguise;
     }
 
     /////////////////////

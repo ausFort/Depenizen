@@ -1,5 +1,6 @@
 package com.denizenscript.depenizen.bukkit.bridges;
 
+import com.denizenscript.denizen.tags.core.ServerTagBase;
 import com.denizenscript.depenizen.bukkit.properties.factions.FactionsNPCProperties;
 import com.denizenscript.depenizen.bukkit.objects.factions.FactionTag;
 import com.denizenscript.depenizen.bukkit.Bridge;
@@ -68,13 +69,14 @@ public class FactionsBridge extends Bridge {
         Attribute attribute = event.getAttributes().fulfill(1);
 
         // <--[tag]
-        // @attribute <factions.list_factions>
+        // @attribute <factions.list>
         // @returns ListTag(dFaction)
         // @plugin Depenizen, Factions
         // @description
         // Returns a list of all current factions.
         // -->
-        if (attribute.startsWith("list_factions")) {
+        if (attribute.startsWith("list")) {
+            ServerTagBase.listDeprecateWarn(attribute);
             ListTag factions = new ListTag();
             for (Faction f : FactionColl.get().getAll()) {
                 factions.addObject(new FactionTag(f));

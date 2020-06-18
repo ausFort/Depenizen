@@ -1,5 +1,6 @@
 package com.denizenscript.depenizen.bukkit.bridges;
 
+import com.denizenscript.denizen.tags.core.ServerTagBase;
 import com.denizenscript.depenizen.bukkit.events.towny.PlayerEntersTownScriptEvent;
 import com.denizenscript.depenizen.bukkit.events.towny.PlayerExitsTownScriptEvent;
 import com.denizenscript.depenizen.bukkit.properties.towny.TownyCuboidProperties;
@@ -60,13 +61,14 @@ public class TownyBridge extends Bridge {
         Attribute attribute = event.getAttributes().fulfill(1);
 
         // <--[tag]
-        // @attribute <towny.list_towns[<world name>]>
+        // @attribute <towny.list[<world name>]>
         // @returns ListTag(Element)
         // @plugin Depenizen, Towny
         // @description
         // Returns a list of all towns. Optionally specify a world name.
         // -->
-        if (attribute.startsWith("list_towns")) {
+        if (attribute.startsWith("list")) {
+            ServerTagBase.listDeprecateWarn(attribute);
             ListTag towns = new ListTag();
             if (attribute.hasContext(1)) {
                 try {
