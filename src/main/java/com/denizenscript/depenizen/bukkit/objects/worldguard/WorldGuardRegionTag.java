@@ -1,20 +1,22 @@
 package com.denizenscript.depenizen.bukkit.objects.worldguard;
 
+import com.denizenscript.denizen.objects.CuboidTag;
+import com.denizenscript.denizen.objects.PlayerTag;
+import com.denizenscript.denizen.objects.WorldTag;
+import com.denizenscript.denizen.utilities.debugging.Debug;
+import com.denizenscript.denizencore.objects.Adjustable;
+import com.denizenscript.denizencore.objects.Fetchable;
+import com.denizenscript.denizencore.objects.Mechanism;
+import com.denizenscript.denizencore.objects.ObjectTag;
+import com.denizenscript.denizencore.objects.core.ElementTag;
+import com.denizenscript.denizencore.objects.core.ListTag;
+import com.denizenscript.denizencore.tags.Attribute;
+import com.denizenscript.denizencore.tags.TagContext;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
-import com.denizenscript.denizen.objects.CuboidTag;
-import com.denizenscript.denizen.objects.PlayerTag;
-import com.denizenscript.denizen.objects.WorldTag;
-import com.denizenscript.denizen.utilities.debugging.Debug;
-import com.denizenscript.denizencore.objects.core.ElementTag;
-import com.denizenscript.denizencore.objects.Fetchable;
-import com.denizenscript.denizencore.objects.core.ListTag;
-import com.denizenscript.denizencore.objects.ObjectTag;
-import com.denizenscript.denizencore.tags.Attribute;
-import com.denizenscript.denizencore.tags.TagContext;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 
@@ -22,7 +24,7 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class WorldGuardRegionTag implements ObjectTag {
+public class WorldGuardRegionTag implements ObjectTag, Adjustable {
 
     // <--[language]
     // @name WorldGuardRegionTag Objects
@@ -225,5 +227,70 @@ public class WorldGuardRegionTag implements ObjectTag {
 
         return new ElementTag(identify()).getAttribute(attribute);
 
+    }
+
+    @Override
+    public void adjust(Mechanism mechanism) {
+
+        // <--[mechanism]
+        // @object WorldGuardRegionTag
+        // @name add_member
+        // @input PlayerTag
+        // @description
+        // Adds a player to the members of the WorldGuard region.
+        // @tags
+        // <WorldGuardRegionTag.members>
+        // -->
+        if (mechanism.matches("add_member") && mechanism.requireObject(PlayerTag.class)) {
+            PlayerTag player = mechanism.valueAsType(PlayerTag.class);
+            region.getMembers().addPlayer(player.getOfflinePlayer().getUniqueId());
+        }
+
+        // <--[mechanism]
+        // @object WorldGuardRegionTag
+        // @name remove_member
+        // @input PlayerTag
+        // @description
+        // Removes a player from the members of the WorldGuard region.
+        // @tags
+        // <WorldGuardRegionTag.members>
+        // -->
+        if (mechanism.matches("remove_member") && mechanism.requireObject(PlayerTag.class)) {
+            PlayerTag player = mechanism.valueAsType(PlayerTag.class);
+            region.getMembers().removePlayer(player.getOfflinePlayer().getUniqueId());
+        }
+
+        // <--[mechanism]
+        // @object WorldGuardRegionTag
+        // @name add_owner
+        // @input PlayerTag
+        // @description
+        // Adds a player to the owners of the WorldGuard region.
+        // @tags
+        // <WorldGuardRegionTag.owners>
+        // -->
+        if (mechanism.matches("add_owner") && mechanism.requireObject(PlayerTag.class)) {
+            PlayerTag player = mechanism.valueAsType(PlayerTag.class);
+            region.getOwners().addPlayer(player.getOfflinePlayer().getUniqueId());
+        }
+
+        // <--[mechanism]
+        // @object WorldGuardRegionTag
+        // @name remove_owner
+        // @input PlayerTag
+        // @description
+        // Removes a player from the owners of the WorldGuard region.
+        // @tags
+        // <WorldGuardRegionTag.owners>
+        // -->
+        if (mechanism.matches("remove_owner") && mechanism.requireObject(PlayerTag.class)) {
+            PlayerTag player = mechanism.valueAsType(PlayerTag.class);
+            region.getOwners().removePlayer(player.getOfflinePlayer().getUniqueId());
+        }
+    }
+
+    @Override
+    public void applyProperty(Mechanism mechanism) {
+        com.denizenscript.denizencore.utilities.debugging.Debug.echoError("Cannot apply Properties to a WorldGuardRegionTag!");
     }
 }
